@@ -9,6 +9,26 @@ const itemSchema = new Schema({
   purchased: Boolean
 });
 
+itemSchema.pre('find', next => {
+  this.populate('user');
+  next();
+});
+
+itemSchema.pre('findOne', next => {
+  this.populate('user');
+  next();
+});
+
+itemSchema.methods.serialize = function() {
+  return {
+    id: this._id,
+    user: this.user,
+    name: this.name,
+    price: this.price,
+    purchased: this.purchased
+  };
+};
+
 const Item = mongoose.model('Item', itemSchema);
 
 module.exports = Item;
