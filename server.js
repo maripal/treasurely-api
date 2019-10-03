@@ -27,7 +27,7 @@ const usersRouter = require('./routes/users');
 app.use('/users', usersRouter);
 
 app.get('/', (req, res) => {
-  res.send('Hello world!');
+  res.json({ message: 'Hello world!' });
 });
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
