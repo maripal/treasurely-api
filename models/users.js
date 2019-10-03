@@ -8,10 +8,11 @@ const userSchema = new Schema({
     type: String, 
     unique: true,
     trim: true,
-    required: true,  
+    required: true,
+    minlength: 3
   },
   password: { type: String, required: true },
-  firstName: { type: String },
+  firstName: { type: String, required: true, minlength: 3 },
   total: { type: Number }
 });
 
