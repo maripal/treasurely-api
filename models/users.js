@@ -16,6 +16,15 @@ const userSchema = new Schema({
   total: { type: Number }
 });
 
+userSchema.methods.serialize = function() {
+  return {
+    id: this._id,
+    username: this.username,
+    firstName: this.firstName,
+    total: this.total
+  };
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

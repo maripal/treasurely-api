@@ -4,7 +4,7 @@ let User = require('../models/users');
 
 router.route('/').get((req, res) => {
   User.find()
-    .then(users => res.status(200).json(users))
+    .then(users => res.json(users.map(user => user.serialize())))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
