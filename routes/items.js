@@ -9,7 +9,8 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/add').post((req, res) => {
-  const { name, price } = req.body;
+  const name = req.body.name;
+  const price = Number(req.body.price);
 
   const newItem = new Item({
     name,
