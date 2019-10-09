@@ -4,7 +4,8 @@ let Item = require('../models/items');
 
 router.route('/').get((req, res) => {
   Item.find() 
-  .then(items => res.status(200).json(items))
+  //.populate({'path': 'user'})
+  .then(items => res.send(items.map(item => item.serialize())))
   .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
@@ -17,8 +18,10 @@ router.route('/add').post((req, res) => {
     price
   });
 
+  console.log(newItem)
+
   newItem.save()
-  .then(() => res.status(201).json(`Item added!`))
+  .then(item => res.status(201).json(item.serialize()))
   .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
