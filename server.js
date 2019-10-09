@@ -23,8 +23,10 @@ connection.once('open', () => {
 });
 
 const usersRouter = require('./routes/users');
+const itemsRouter = require('./routes/items');
 
 app.use('/users', usersRouter);
+app.use('/items', itemsRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hello world!' });
