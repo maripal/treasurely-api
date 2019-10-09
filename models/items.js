@@ -10,7 +10,7 @@ const itemSchema = new Schema({
   purchased: Boolean
 });
 
-itemSchema.pre('find', next => {
+/* itemSchema.pre('find', next => {
   this.populate('user');
   next();
 });
@@ -18,7 +18,7 @@ itemSchema.pre('find', next => {
 itemSchema.pre('findOne', next => {
   this.populate('user');
   next();
-});
+}); */
 
 itemSchema.methods.serialize = function() {
   return {
