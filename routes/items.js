@@ -46,4 +46,10 @@ router.route('/update/:id').put((req ,res) => {
   });
 });
 
+router.route('/:id').delete((req, res) => {
+  Item.findByIdAndRemove(req.params.id)
+  .then(()=> res.send(204).end())
+  .catch(err => res.status(500).json(`Error: ${err}`));
+});
+
 module.exports = router;
