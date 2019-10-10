@@ -7,8 +7,8 @@ const app = express();
 
 const { PORT, DATABASE_URL } = require('./config');
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
   cors({
     origin: CLIENT_ORIGIN
