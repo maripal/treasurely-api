@@ -8,7 +8,8 @@ const passport = require('passport');
 //const {CLIENT_ORIGIN} = require('./config');
 const usersRouter = require('./routes/users');
 const itemsRouter = require('./routes/items');
-const { authRouter, localStrategy, jwtStrategy } = require('./auth');
+const authRouter = require('./auth/router');
+const { localStrategy, jwtStrategy } = require('./auth/strategies');
 
 const app = express();
 const { PORT, DATABASE_URL } = require('./config');
