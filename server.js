@@ -3,8 +3,13 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
 //const {CLIENT_ORIGIN} = require('./config');
+const usersRouter = require('./routes/users');
+const itemsRouter = require('./routes/items');
+const { authRouter, localStrategy, jwtStrategy } = require('./auth');
+
 const app = express();
 const { PORT, DATABASE_URL } = require('./config');
 
@@ -21,11 +26,12 @@ connection.once('open', () => {
   console.log('Mongo database connection established successfully');
 }); */
 
-const usersRouter = require('./routes/users');
-const itemsRouter = require('./routes/items');
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 app.use('/users', usersRouter);
 app.use('/items', itemsRouter);
+app.use('/auth', authRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hello world!' });
