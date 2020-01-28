@@ -1,18 +1,17 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const {CLIENT_ORIGIN} = require('./config');
-const app = express();
 
+//const {CLIENT_ORIGIN} = require('./config');
+const app = express();
 const { PORT, DATABASE_URL } = require('./config');
 
-//app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
-  cors({
-    origin: CLIENT_ORIGIN
-  })
+  cors()
 );
 
 /* mongoose.connect(DATABASE_URL, { useNewUrlParser: true });
@@ -36,7 +35,7 @@ let server;
 
 function runServer(databaseUrl=DATABASE_URL, port=PORT) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(databaseUrl, {useNewUrlParser: true}, err => {
+    mongoose.connect(databaseUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }, err => {
       if (err) {
         return reject(err);
       }

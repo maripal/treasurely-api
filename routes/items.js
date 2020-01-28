@@ -47,7 +47,7 @@ router.route('/update/:id').put((req ,res) => {
 });
 
 router.route('/:id').delete((req, res) => {
-  Item.findByIdAndRemove(req.params.id)
+  Item.findByIdAndDelete(req.params.id)
   .then(()=> res.sendStatus(204).end())
   .catch(err => res.status(500).json(`Error: ${err}`));
 });
