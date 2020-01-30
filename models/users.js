@@ -15,11 +15,14 @@ const userSchema = new Schema({
     type: String, 
     trim: true, 
     required: true, 
-    minlength: 10 },
+    minlength: 10 
+  },
   firstName: { 
     type: String, 
     required: true, 
-    minlength: 3 },
+    minlength: 3,
+    trim: true
+  }
 });
 
 userSchema.methods.serialize = function() {

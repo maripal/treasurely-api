@@ -14,8 +14,22 @@ router.route('/add').post((req, res) => {
   //const newUser = new User({ username, password, firstName });
   //console.log(newUser);
 
+  // Give error if username or password has any whitespace. No trimming.
+  const explicitlyTrimmedFields = ['username', 'password'];
+  const nonTrimmedField = explicitlyTrimmedFields.find(field => req.body[field].trim() !== req.body[field]);
+
+  if (nonTrimmedField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Cannot start or end with whitespace',
+      location: nonTrimmedField
+    });
+  }
+
   return User.find({username})
-    .count()
+    // count() is deprecated
+    .countDocuments()
     .then(count => {
       if (count > 0) {
         return Promise.reject({
