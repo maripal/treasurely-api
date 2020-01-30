@@ -27,6 +27,35 @@ router.route('/add').post((req, res) => {
     });
   }
 
+  // Check username & password length
+  const acceptedSizedFields = {
+    username: {
+      min: 3
+    },
+    password: {
+      min: 10,
+      max: 72
+    }
+  };
+
+  const tooSmallField = Object.keys(acceptedSizedFields).find(field => 
+    'min' in acceptedSizedFields[field] && req.body[field].trim().length < acceptedSizedFields[field].min
+    );
+
+  const tooLargeField = Object.keys(acceptedSizedFields).find(field =>
+    'max' in acceptedSizedFields[field] && req.body[field].trim().length > acceptedSizedFields[field].max
+  );
+
+  if (tooSmallField || tooLargeField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: tooSmallField ? `Must be at least ${acceptedSizedFields[tooSmallField].min} characters long` :
+      `Must be at most ${acceptedSizedFields[tooLargeField].max} characters long`,
+      location: tooSmallField || tooLargeField
+    });
+  }
+
   return User.find({username})
     // count() is deprecated
     .countDocuments()
