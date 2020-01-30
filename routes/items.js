@@ -19,10 +19,24 @@ router.route('/:id').get(jwtAuth, (req, res) => {
 });
 
 router.route('/add').post(jwtAuth, (req, res) => {
+
+
   const user = req.user.id
   const name = req.body.name;
   const price = Number(req.body.price);
   const purchased = false;
+
+  // Check for required fields
+  const requiredFields = ['name', 'price'];
+
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing ${field} in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
 
   const newItem = new Item({
     user,

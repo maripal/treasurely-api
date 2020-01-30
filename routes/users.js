@@ -11,9 +11,6 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
   let { username, password, firstName } = req.body;
 
-  //const newUser = new User({ username, password, firstName });
-  //console.log(newUser);
-
   // Give error if username or password has any whitespace. No trimming.
   const explicitlyTrimmedFields = ['username', 'password'];
   const nonTrimmedField = explicitlyTrimmedFields.find(field => req.body[field].trim() !== req.body[field]);
