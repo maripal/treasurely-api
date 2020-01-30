@@ -53,10 +53,27 @@ router.route('/add').post(jwtAuth, (req, res) => {
 });
 
 router.route('/update/:id').put(jwtAuth, (req ,res) => {
-  // Have to add more vlaidation here for required fields to update
+  // Check for required fields
+  const requiredFields = ['name', 'price'];
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing ${field} in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  // Check if item path id matches req.body id
+  if (req.params.id !== req.body.id) {
+    const message = `Request path id ${req.params.id} and request body id ${req.body.id} must match`;
+    console.error(message);
+    return res.status(400).send(message);
+  }
   
   Item.findById(req.params.id)
   .then(item => {
+    item.id = req.params.id;
     item.name = req.body.name;
     item.price = req.body.price;
     item.purchased = req.body.purchased;
