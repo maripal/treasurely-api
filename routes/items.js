@@ -70,19 +70,21 @@ router.route('/update/:id').put(jwtAuth, (req ,res) => {
     console.error(message);
     return res.status(400).send(message);
   }
-  
-  Item.findById(req.params.id)
-  .then(item => {
-    item.id = req.params.id;
-    item.name = req.body.name;
-    item.price = req.body.price;
-    item.purchased = req.body.purchased;
 
-    item.save()
-    .then(item => res.status(200).json(item.serialize()))
+  // Check and save updated fields
+  const updated = {}
+  const updateabldFields = ['name', 'price', 'purchased'];
+
+  updateabldFields.forEach(field => {
+    if (field in req.body) {
+      updated[field] = req.body[field];
+    }
+  });
+
+  Item.findByIdAndUpdate(req.body.id, {$set: updated}, {new: true})
+    .then(() => res.status(204).end())
     .catch(err => res.status(500).json(`Error: ${err}`));
   });
-});
 
 router.route('/:id').delete(jwtAuth, (req, res) => {
   Item.findByIdAndDelete(req.params.id)
