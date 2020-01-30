@@ -5,25 +5,27 @@ const passport = require('passport');
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
-router.route('/').get((req, res) => {
-  Item.find() 
-  //.populate({'path': 'user'})
+router.route('/').get(jwtAuth, (req, res) => {
+  Item.find({user: req.user.id}) 
+  .populate('user')
   .then(items => res.send(items.map(item => item.serialize())))
   .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.route('/:id').get((req, res) => {
+router.route('/:id').get(jwtAuth, (req, res) => {
   Item.findById(req.params.id)
   .then(item => res.json(item.serialize()))
   .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
 router.route('/add').post(jwtAuth, (req, res) => {
+  const user = req.user.id
   const name = req.body.name;
   const price = Number(req.body.price);
   const purchased = false;
 
   const newItem = new Item({
+    user,
     name,
     price,
     purchased
@@ -36,7 +38,9 @@ router.route('/add').post(jwtAuth, (req, res) => {
   .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.route('/update/:id').put((req ,res) => {
+router.route('/update/:id').put(jwtAuth, (req ,res) => {
+  // Have to add more vlaidation here for required fields to update
+  
   Item.findById(req.params.id)
   .then(item => {
     item.name = req.body.name;
@@ -49,7 +53,7 @@ router.route('/update/:id').put((req ,res) => {
   });
 });
 
-router.route('/:id').delete((req, res) => {
+router.route('/:id').delete(jwtAuth, (req, res) => {
   Item.findByIdAndDelete(req.params.id)
   .then(()=> res.sendStatus(204).end())
   .catch(err => res.status(500).json(`Error: ${err}`));

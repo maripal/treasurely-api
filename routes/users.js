@@ -40,12 +40,6 @@ router.route('/add').post((req, res) => {
       }
       res.status(500).json({code: 500, message: 'Internal Server Error'})
     });
-
-  // newUser.save()
-  //   .then(user => {
-  //     res.status(201).json(user);
-  //   })
-  //   .catch(err => res.status(400).json(`Error ${err}`));
 });
 
 module.exports = router;
