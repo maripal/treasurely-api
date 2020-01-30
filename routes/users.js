@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-let User = require('../models/users');
+const User = require('../models/users');
 
 router.route('/').get((req, res) => {
   User.find()
@@ -11,14 +11,41 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
   let { username, password, firstName } = req.body;
 
-  const newUser = new User({ username, password, firstName });
-  console.log(newUser);
+  //const newUser = new User({ username, password, firstName });
+  //console.log(newUser);
 
-  newUser.save()
-    .then(user => {
-      res.status(201).json(user);
+  return User.find({username})
+    .count()
+    .then(count => {
+      if (count > 0) {
+        return Promise.reject({
+          code: 422,
+          reason: 'ValidationError',
+          message: 'Username already exists',
+          location: username
+        });
+      }
+      // if username doesn't exist, return hashed password
+      return User.hashPassword(password);
     })
-    .catch(err => res.status(400).json(`Error ${err}`));
+    .then(hash => {
+      return new User({ username, password: hash, firstName }).save();
+    })
+    .then(user => {
+      res.status(201).json(user.serialize());
+    })
+    .catch(err => {
+      if (err.reason === 'ValidationError') {
+        return res.status(err.code).json(err);
+      }
+      res.status(500).json({code: 500, message: 'Internal Server Error'})
+    });
+
+  // newUser.save()
+  //   .then(user => {
+  //     res.status(201).json(user);
+  //   })
+  //   .catch(err => res.status(400).json(`Error ${err}`));
 });
 
 module.exports = router;

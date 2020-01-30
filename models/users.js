@@ -11,8 +11,15 @@ const userSchema = new Schema({
     required: true,
     minlength: 3
   },
-  password: { type: String, required: true },
-  firstName: { type: String, required: true, minlength: 3 },
+  password: { 
+    type: String, 
+    trim: true, 
+    required: true, 
+    minlength: 10 },
+  firstName: { 
+    type: String, 
+    required: true, 
+    minlength: 3 },
 });
 
 userSchema.methods.serialize = function() {

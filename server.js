@@ -20,6 +20,10 @@ app.use(
   cors()
 );
 
+app.use('/users', usersRouter);
+app.use('/items', itemsRouter);
+app.use('/auth', authRouter);
+
 /* mongoose.connect(DATABASE_URL, { useNewUrlParser: true });
 const connection = mongoose.connection;
 
@@ -29,10 +33,6 @@ connection.once('open', () => {
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
-
-app.use('/users', usersRouter);
-app.use('/items', itemsRouter);
-app.use('/auth', authRouter);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Hello world!' });

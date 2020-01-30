@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
-let Item = require('../models/items');
+const Item = require('../models/items');
+const passport = require('passport');
+
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
 router.route('/').get((req, res) => {
   Item.find() 
@@ -15,7 +18,7 @@ router.route('/:id').get((req, res) => {
   .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-router.route('/add').post((req, res) => {
+router.route('/add').post(jwtAuth, (req, res) => {
   const name = req.body.name;
   const price = Number(req.body.price);
   const purchased = false;
