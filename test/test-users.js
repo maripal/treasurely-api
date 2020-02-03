@@ -160,7 +160,27 @@ describe('User API', function() {
           });
       });
 
-      
+      it('should reject users with duplicate username', function() {
+        return User.create({
+          username: 'exampleUser',
+          password,
+          firstName
+        })
+        .then(() => {
+          return chai
+            .request(app)
+            .post('/users/add')
+            .send({ username: 'exampleUser', password, firstName })
+        })
+        .then(res => {
+          expect(res).to.have.status(422);
+          expect(res.body.reason).to.equal('ValidationError');
+          expect(res.body.message).to.equal('Username already exists');
+          expect(res.body.location).to.equal('exampleUser');
+        });
+      });
+
+
     })
   })
 })
