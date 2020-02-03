@@ -56,6 +56,19 @@ describe('User API', function() {
           });
       });
 
+      it('should reject users with non-string username', function() {
+        return chai
+          .request(app)
+          .post('/users/add')
+          .send({ username: 1234, password, firstName })
+          .then(res => {
+            expect(res).to.have.status(422);
+            expect(res.body.reason).to.equal('ValidationError');
+            expect(res.body.message).to.equal('Incorrect field type: expected a string');
+            expect(res.body.location).to.equal('username');
+          });
+      });
+
       
     })
   })
