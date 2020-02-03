@@ -95,6 +95,19 @@ describe('User API', function() {
           });
       });
 
+      it('should reject users with non-trimmed username', function() {
+        return chai
+          .request(app)
+          .post('/users/add')
+          .send({ username: ` ${username}`, password, firstName })
+          .then(res => {
+            expect(res).to.have.status(422);
+            expect(res.body.reason).to.equal('ValidationError');
+            expect(res.body.message).to.equal('Cannot start or end with whitespace');
+            expect(res.body.location).to.equal('username');
+          });
+      });
+
       
     })
   })
