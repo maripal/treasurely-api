@@ -121,6 +121,19 @@ describe('User API', function() {
           });
       });
 
+      it('should reject users with empty username', function() {
+        return chai
+          .request(app)
+          .post('/users/add')
+          .send({ username: '', password, firstName })
+          .then(res => {
+            expect(res).to.have.status(422);
+            expect(res.body.reason).to.equal('ValidationError');
+            expect(res.body.message).to.equal('Must be at least 3 characters long');
+            expect(res.body.location).to.equal('username');
+          });
+      });
+
 
     })
   })
