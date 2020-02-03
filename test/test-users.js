@@ -147,6 +147,19 @@ describe('User API', function() {
           });
       });
 
+      it('should reject users with password greater than 72 characters', function() {
+        return chai
+          .request(app)
+          .post('/users/add')
+          .send({ username, password: new Array(73).fill('a').join(''), firstName })
+          .then(res => {
+            expect(res).to.have.status(422);
+            expect(res.body.reason).to.equal('ValidationError');
+            expect(res.body.message).to.equal('Must be at most 72 characters long');
+            expect(res.body.location).to.equal('password');
+          });
+      });
+
       
     })
   })
