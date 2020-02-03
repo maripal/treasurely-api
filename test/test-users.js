@@ -180,6 +180,31 @@ describe('User API', function() {
         });
       });
 
+      it('should create a new user', function() {
+        return chai
+          .request(app)
+          .post('/users/add')
+          .send({ username, password, firstName })
+          .then(res => {
+            expect(res).to.have.status(201);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.any.keys('id', 'username', 'firstName');
+            expect(res.body.id).to.equal(res.body.id)
+            expect(res.body.username).to.equal(username);
+            expect(res.body.firstName).to.equal(firstName);
+            return User.findOne({ username })
+          })
+          .then(user => {
+            expect(user).to.not.be.null;
+            expect(user.id).to.equal(user.id)
+            expect(user.firstName).to.equal(firstName);
+            return user.validatePassword(password);
+          })
+          .then(passwordIsCorrect => {
+            expect(passwordIsCorrect).to.be.true;
+          });
+      });
+
 
     })
   })
