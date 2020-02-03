@@ -235,7 +235,29 @@ describe('User API', function() {
           });
       });
 
-      
-    })
-  })
+      it('should return an array of users', function() {
+        return User.create(
+          {
+            username,
+            password,
+            firstName
+          },
+          {
+            username: 'UserB',
+            password: 'passwordB1',
+            firstName: 'firstNameB'
+          }
+        )
+        .then(() => chai.request(app).get('/users'))
+        .then(res => {
+          console.log(JSON.stringify(res.body[0].id))
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.length(2);
+          expect(res.body[0]).to.deep.equal({ id: res.body[0].id, username, firstName });
+          expect(res.body[1]).to.deep.equal({ id: res.body[1].id, username: 'UserB', firstName: 'firstNameB'});
+        });
+      });
+    });
+  });
 })
