@@ -221,6 +221,19 @@ describe('User API', function() {
             expect(user.firstName).to.equal(firstName);
           });
       });
+    });
+
+    describe('GET', function() {
+      it('should return an empty array initially', function() {
+        return chai
+          .request(app)
+          .get('/users')
+          .then(res => {
+            expect(res).to.have.status(200);
+            expect(res.body).to.be.an('array');
+            expect(res.body).to.have.length(0);
+          });
+      });
 
       
     })
