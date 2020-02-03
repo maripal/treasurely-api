@@ -43,6 +43,20 @@ describe('User API', function() {
           });
       });
 
+      it('should reject user with missing password', function() {
+        return chai
+          .request(app)
+          .post('/users/add')
+          .send({ username, firstName })
+          .then(res => {
+            expect(res).to.have.status(422);
+            expect(res.body.reason).to.equal('ValidationError');
+            expect(res.body.message).to.equal('Missing field');
+            expect(res.body.location).to.equal('password');
+          });
+      });
+
+      
     })
   })
 })
