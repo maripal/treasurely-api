@@ -11,6 +11,19 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
   let { username, password, firstName } = req.body;
 
+  // Check for required fields
+  const requiredFields = ['username', 'password', 'firstName'];
+  const missingField = requiredFields.find(field => !(field in req.body));
+
+  if (missingField) {
+    return res.status(422).json({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Missing field',
+      location: missingField
+    });
+  }
+
   // Give error if username or password has any whitespace. No trimming.
   const explicitlyTrimmedFields = ['username', 'password'];
   const nonTrimmedField = explicitlyTrimmedFields.find(field => req.body[field].trim() !== req.body[field]);
