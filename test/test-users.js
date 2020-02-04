@@ -250,7 +250,6 @@ describe('User API', function() {
         )
         .then(() => chai.request(app).get('/users'))
         .then(res => {
-          console.log(JSON.stringify(res.body[0].id))
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.length(2);
