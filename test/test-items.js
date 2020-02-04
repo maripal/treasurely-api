@@ -19,7 +19,6 @@ function seedItemData() {
   for (let i = 1; i <= 5; i++) {
     seedData.push(generateItem());
   }
-  console.log(seedData);
   return Item.insertMany(seedData);
 }
 
@@ -92,6 +91,24 @@ describe('Item API', function() {
         });
     });
 
+    it('should return all items with right fields', function() {
+      let resItem;
+      return chai
+        .request(app)
+        .get('/items')
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => {
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('array');
+          expect(res.body).to.have.lengthOf.at.least(1);
 
+          res.body.forEach(item => {
+            expect(item).to.be.a('object');
+            expect(item).to.include.keys('id', 'name', 'price', 'purchased');
+          })
+          resItem = res.body[0];
+        })
+    })
   })
 })
