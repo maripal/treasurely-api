@@ -26,7 +26,7 @@ function seedItemData() {
 function generateItem() {
   return {
     name: faker.commerce.productName(),
-    price: faker.finance.amount(),
+    price: +faker.finance.amount(),
     purchased: false
   };
 }
@@ -108,6 +108,27 @@ describe('Item API', function() {
             expect(item).to.include.keys('id', 'name', 'price', 'purchased');
           })
           resItem = res.body[0];
+        });
+    });
+  });
+
+  describe('POST', function() {
+    it('should add a new item', function() {
+      const newItem = generateItem();
+      return chai
+        .request(app)
+        .post('/items/add')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newItem)
+        .then(res => {
+          expect(res).to.have.status(201);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.include.keys('id', 'name', 'price', 'purchased');
+          expect(res.body.id).to.not.be.null;
+          expect(res.body.name).to.deep.equal(newItem.name);
+          expect(res.body.price).to.deep.equal(newItem.price);
+          expect(res.body.purchased).to.deep.equal(newItem.purchased);
         })
     })
   })
