@@ -158,7 +158,28 @@ describe('Item API', function() {
         .then(item => {
           expect(item.name).to.deep.equal(updateItem.name);
           expect(item.price).to.deep.equal(updateItem.price);
+        });
+    });
+  });
+
+  describe('DELETE', function() {
+    it('should delete an item by id', function() {
+      let item;
+
+      return Item
+        .findOne()
+        .then(_item => {
+          item = _item;
+          return chai
+            .request(app)
+            .delete(`/items/${item.id}`)
+            .set('Authorization', `Bearer ${token}`)
         })
+        .then(res => {
+          expect(res).to.have.status(204);
+          return Item.findById(item.id);
+        })
+        .then(item => expect(item).to.be.null);
     })
   })
 })
