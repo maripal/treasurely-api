@@ -129,6 +129,35 @@ describe('Item API', function() {
           expect(res.body.name).to.deep.equal(newItem.name);
           expect(res.body.price).to.deep.equal(newItem.price);
           expect(res.body.purchased).to.deep.equal(newItem.purchased);
+        });
+    });
+  });
+
+  describe('PUT', function() {
+    it('should update an item', function() {
+      const updateItem = {
+        name: 'Books',
+        price: 50
+      };
+
+      return Item 
+        .findOne()
+        .then(item => {
+          updateItem.id = item.id;
+
+          return chai
+            .request(app)
+            .put(`/items/update/${updateItem.id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(updateItem)
+        })
+        .then(res => {
+          expect(res).to.have.status(204);
+          return Item.findById(updateItem.id);
+        })
+        .then(item => {
+          expect(item.name).to.deep.equal(updateItem.name);
+          expect(item.price).to.deep.equal(updateItem.price);
         })
     })
   })
