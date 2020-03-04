@@ -82,7 +82,7 @@ router.route('/update/:id').put(jwtAuth, (req ,res) => {
   });
 
   Item.findByIdAndUpdate(req.body.id, {$set: updated}, {new: true})
-    .then(updatedItem => res.status(204).end())
+    .then(updatedItem => res.status(201).json(updatedItem.serialize()))
     .catch(err => res.status(500).json(`Error: ${err}`));
   });
 
