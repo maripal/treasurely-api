@@ -152,7 +152,7 @@ describe('Item API', function() {
             .send(updateItem)
         })
         .then(res => {
-          expect(res).to.have.status(204);
+          expect(res).to.have.status(201);
           return Item.findById(updateItem.id);
         })
         .then(item => {
