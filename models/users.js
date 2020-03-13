@@ -21,14 +21,16 @@ const userSchema = new Schema({
     required: true, 
     minlength: 3,
     trim: true
-  }
+  },
+  totalSavings: { type: Number, min: 0, default: 0 }
 });
 
 userSchema.methods.serialize = function() {
   return {
     id: this._id,
     username: this.username,
-    firstName: this.firstName
+    firstName: this.firstName,
+    totalSavings: this.totalSavings
   };
 };
 
