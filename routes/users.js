@@ -1,12 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
+const passport = require('passport');
+
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 router.route('/').get((req, res) => {
   User.find()
     .then(users => res.json(users.map(user => user.serialize())))
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
+
+router.route('/total').put(jwtAuth, (req, res) => {
+  console.log(req.body)
+  console.log(req.user.id)
+  User.findByIdAndUpdate({_id: req.user.id}, { $set: { totalSavings: req.body.totalSavings }})
+    .then(amount => res.status(201).json(amount))
+    .catch(err => res.status(400).json(`Error: ${err}`))
+})
 
 router.route('/add').post((req, res) => {
   let { username, password, firstName } = req.body;
