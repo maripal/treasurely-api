@@ -14,8 +14,10 @@ router.route('/').get((req, res) => {
 router.route('/total').put(jwtAuth, (req, res) => {
   console.log(req.body)
   console.log(req.user.id)
-  User.findByIdAndUpdate({_id: req.user.id}, { $set: { totalSavings: req.body.totalSavings }})
-    .then(amount => res.status(201).json(amount))
+  User.updateOne({_id: req.user.id}, { $set: { totalSavings: req.body.totalSavings } }, { new: true })
+    // .then(amount => res.status(201).json(amount))
+    .then(amount => res.status(201).json({totalSavings: req.body.totalSavings}))
+    // .then(amount => console.log(amount.totalSavings))
     .catch(err => res.status(400).json(`Error: ${err}`))
 })
 
