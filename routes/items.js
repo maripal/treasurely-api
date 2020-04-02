@@ -7,7 +7,7 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 router.route('/').get(jwtAuth, (req, res) => {
   Item.find({user: req.user.id}) 
-  .populate('user')
+  .populate('user', '_id username firstName')
   .then(items => res.send(items.map(item => item.serialize())))
   .catch(err => res.status(400).json(`Error: ${err}`));
 });
