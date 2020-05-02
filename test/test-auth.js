@@ -27,7 +27,7 @@ describe('Auth endpoints', function () {
     return User.hashPassword(password).then(password => {
       User.create({
         username,
-        password, 
+        password,
         firstName
       });
     });
@@ -80,7 +80,9 @@ describe('Auth endpoints', function () {
           const payload = jwt.verify(token, JWT_SECRET, {
             algorithm: ['HS256']
           });
-          expect(payload.user).to.deep.equal({ id: payload.user.id, username, firstName})
+          const { id, username, firstName } = payload.user
+          console.log(payload.user)
+          expect({id, username, firstName}).to.deep.equal({ id: payload.user.id, username, firstName})
         });
     });
   });

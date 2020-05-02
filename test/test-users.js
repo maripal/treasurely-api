@@ -13,6 +13,7 @@ describe('User API', function() {
   const username = 'exampleUser';
   const password = 'examplePass';
   const firstName = 'Example';
+  const totalSavings = 0;
 
   before(function() {
     return runServer(TEST_DATABASE_URL);
@@ -213,7 +214,7 @@ describe('User API', function() {
           .then(res => {
             expect(res).to.have.status(201);
             expect(res.body).to.be.an('object');
-            expect(res.body).to.have.keys('id', 'username', 'firstName');
+            expect(res.body).to.have.keys('id', 'username', 'totalSavings', 'firstName');
             return User.findOne({ username })
           })
           .then(user => {
@@ -240,12 +241,14 @@ describe('User API', function() {
           {
             username,
             password,
-            firstName
+            firstName, 
+            totalSavings
           },
           {
             username: 'UserB',
             password: 'passwordB1',
-            firstName: 'firstNameB'
+            firstName: 'firstNameB',
+            totalSavings: 100
           }
         )
         .then(() => chai.request(app).get('/users'))
@@ -253,8 +256,8 @@ describe('User API', function() {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.length(2);
-          expect(res.body[0]).to.deep.equal({ id: res.body[0].id, username, firstName });
-          expect(res.body[1]).to.deep.equal({ id: res.body[1].id, username: 'UserB', firstName: 'firstNameB'});
+          expect(res.body[0]).to.deep.equal({ id: res.body[0].id, username, firstName, totalSavings });
+          expect(res.body[1]).to.deep.equal({ id: res.body[1].id, username: 'UserB', firstName: 'firstNameB', totalSavings: 100 });
         });
       });
     });
