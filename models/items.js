@@ -7,7 +7,7 @@ const itemSchema = new Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   name: { type: String, required: true },
   price: { type: Number, required: true },
-  purchased: Boolean
+  purchased: { type: Boolean, default: false }
 });
 
 itemSchema.methods.serialize = function() {
