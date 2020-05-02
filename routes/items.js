@@ -33,7 +33,6 @@ router.route('/add').post(jwtAuth, (req, res) => {
     const field = requiredFields[i];
     if (!(field in req.body)) {
       const message = `Missing ${field} in request body`;
-      console.error(message);
       return res.status(400).send(message);
     }
   }
@@ -45,29 +44,16 @@ router.route('/add').post(jwtAuth, (req, res) => {
     purchased
   });
 
-  console.log(newItem)
-
   newItem.save()
   .then(item => res.status(201).json(item.serialize()))
   .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
 router.route('/update/:id').put(jwtAuth, (req ,res) => {
-  // Check for required fields
-  const requiredFields = ['name', 'price'];
-  for (let i = 0; i < requiredFields.length; i++) {
-    const field = requiredFields[i];
-    if (!(field in req.body)) {
-      const message = `Missing ${field} in request body`;
-      console.error(message);
-      return res.status(400).send(message);
-    }
-  }
 
   // Check if item path id matches req.body id
   if (req.params.id !== req.body.id) {
     const message = `Request path id ${req.params.id} and request body id ${req.body.id} must match`;
-    console.error(message);
     return res.status(400).send(message);
   }
 
@@ -85,6 +71,7 @@ router.route('/update/:id').put(jwtAuth, (req ,res) => {
     .then(updatedItem => res.status(201).json(updatedItem.serialize()))
     .catch(err => res.status(500).json(`Error: ${err}`));
   });
+
 
 router.route('/:id').delete(jwtAuth, (req, res) => {
   Item.findByIdAndDelete(req.params.id)
