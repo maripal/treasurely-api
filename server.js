@@ -30,9 +30,9 @@ app.use('/auth', authRouter);
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello world!' });
-});
+// app.get('/', (req, res) => {
+//   res.json({ message: 'Hello world!' });
+// });
 
 let server;
 
