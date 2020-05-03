@@ -5,10 +5,9 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
-//const {CLIENT_ORIGIN} = require('./config');
+const {CLIENT_ORIGIN} = require('./config');
 const usersRouter = require('./routes/users');
 const itemsRouter = require('./routes/items');
-//const totalRouter = require('./routes/total');
 const authRouter = require('./auth/router');
 const { localStrategy, jwtStrategy } = require('./auth/strategies');
 
@@ -18,7 +17,9 @@ const { PORT, DATABASE_URL } = require('./config');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
-  cors()
+  cors({ 
+    origin: CLIENT_ORIGIN
+  })
 );
 
 app.use('/users', usersRouter);
@@ -28,9 +29,9 @@ app.use('/auth', authRouter);
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello world!' });
-});
+// app.get('/', (req, res) => {
+//   res.json({ message: 'Hello world!' });
+// });
 
 let server;
 
