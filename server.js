@@ -14,7 +14,6 @@ const { localStrategy, jwtStrategy } = require('./auth/strategies');
 const app = express();
 const { PORT, DATABASE_URL } = require('./config');
 
-app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
@@ -32,8 +31,7 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.get('/', (req, res) => {
-  // res.json({ message: 'Hello world!' });
-  res.sendFile(__dirname + '/index.html')
+  res.json({ message: 'Hello world!' });
 });
 
 let server;
