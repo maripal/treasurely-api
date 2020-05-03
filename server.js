@@ -14,6 +14,7 @@ const { localStrategy, jwtStrategy } = require('./auth/strategies');
 const app = express();
 const { PORT, DATABASE_URL } = require('./config');
 
+app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
@@ -30,9 +31,10 @@ app.use('/auth', authRouter);
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-// app.get('/', (req, res) => {
-//   res.json({ message: 'Hello world!' });
-// });
+app.get('/', (req, res) => {
+  // res.json({ message: 'Hello world!' });
+  res.status(200).res.sendFile(__dirname, '/index.html')
+});
 
 let server;
 
@@ -71,7 +73,5 @@ function closeServer() {
 if (require.main === module) {
   runServer(DATABASE_URL).catch(err => console.error(err));
 }
-
-//app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 module.exports = { runServer, app, closeServer };
