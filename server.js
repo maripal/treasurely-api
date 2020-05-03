@@ -33,7 +33,7 @@ passport.use(jwtStrategy);
 
 app.get('/', (req, res) => {
   // res.json({ message: 'Hello world!' });
-  req.sendFile(__dirname + '/index.html')
+  res.sendFile(__dirname + '/index.html')
 });
 
 let server;
