@@ -43,8 +43,6 @@ passport.use(jwtStrategy);
 //   res.json({ message: 'Hello world!' });
 // });
 
-//testing
-
 let server;
 
 function runServer(databaseUrl=DATABASE_URL, port=PORT) {
